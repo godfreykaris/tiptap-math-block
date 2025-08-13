@@ -27,8 +27,6 @@ Peer dependencies (make sure you have them installed):
 npm install @tiptap/react @tiptap/starter-kit @tiptap/pm katex react react-dom
 ```
 
-> **Note:** If your ESLint flags imports from `prosemirror-state`, prefer importing from `@tiptap/pm/state` instead.
-
 ---
 
 ## Quick Start

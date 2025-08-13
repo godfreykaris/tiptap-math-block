@@ -383,7 +383,7 @@ const MathModal: React.FC<MathModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center px-4 dark"
       aria-labelledby="math-modal-title"
       role="dialog"
       aria-modal="true"

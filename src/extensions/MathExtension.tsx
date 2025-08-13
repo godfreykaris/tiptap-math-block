@@ -1,11 +1,11 @@
 // src/extensions/MathExtension.tsx
-import React from 'react';
-import { mergeAttributes, Node } from '@tiptap/core';
-import type { NodeViewProps } from '@tiptap/core';
-import { ReactNodeViewRenderer, NodeViewWrapper } from '@tiptap/react';
-import katex from 'katex';
-import 'katex/dist/katex.min.css';
-import { v4 as uuidv4 } from 'uuid';
+import React from "react";
+import { mergeAttributes, Node } from "@tiptap/core";
+import type { NodeViewProps } from "@tiptap/core";
+import { ReactNodeViewRenderer, NodeViewWrapper } from "@tiptap/react";
+import katex from "katex";
+import "katex/dist/katex.min.css";
+import { v4 as uuidv4 } from "uuid";
 
 // ---------- Types & helpers ----------
 type MatrixRec = {
@@ -19,7 +19,9 @@ type MatrixRec = {
 const PLACEHOLDER_RE = /⟦(M\d+)⟧/g;
 
 const toBmatrix = (cells: string[][]) =>
-  `\\begin{bmatrix}${cells.map((r) => r.join(' & ')).join(' \\\\ ')}\\end{bmatrix}`;
+  `\\begin{bmatrix}${cells
+    .map((r) => r.join(" & "))
+    .join(" \\\\ ")}\\end{bmatrix}`;
 
 function expandForDisplay(
   latexWithPlaceholders: string,
@@ -34,7 +36,7 @@ function expandForDisplay(
     }
   }
 
-  return (latexWithPlaceholders || '').replace(
+  return (latexWithPlaceholders || "").replace(
     PLACEHOLDER_RE,
     (_m, label: string) => {
       const rec = byLabel[label];
@@ -45,10 +47,10 @@ function expandForDisplay(
 
 // ---------- React NodeView ----------
 const MathBlockWrapper = ({ node, updateAttributes }: NodeViewProps) => {
-  const latexWithPlaceholders = (node.attrs.latex as string) || '';
+  const latexWithPlaceholders = (node.attrs.latex as string) || "";
   const id = node.attrs.id as string;
   const alignment =
-    (node.attrs.alignment as 'left' | 'center' | 'right') || 'left';
+    (node.attrs.alignment as "left" | "center" | "right") || "left";
 
   // Memoize matrices object to keep stable deps & avoid re-creating each render
   const matricesMap = React.useMemo(
@@ -63,17 +65,17 @@ const MathBlockWrapper = ({ node, updateAttributes }: NodeViewProps) => {
     try {
       const expanded = expandForDisplay(latexWithPlaceholders, matricesMap);
       const alignedSrc = expanded
-        ? `\\begin{aligned}${expanded}\\end{aligned}`
-        : '';
+        ? `\\begin{gathered}${expanded}\\end{gathered}`
+        : "";
       katex.render(alignedSrc, katexRef.current, {
         throwOnError: false,
         displayMode: true,
-        strict: 'ignore',
+        strict: "ignore",
       });
     } catch (e) {
-      console.error('KaTeX rendering error:', e);
+      console.error("KaTeX rendering error:", e);
       if (katexRef.current) {
-        katexRef.current.innerHTML = '<span>Error rendering LaTeX</span>';
+        katexRef.current.innerHTML = "<span>Error rendering LaTeX</span>";
       }
     }
   }, [latexWithPlaceholders, matricesMap]);
@@ -89,7 +91,7 @@ const MathBlockWrapper = ({ node, updateAttributes }: NodeViewProps) => {
 
   const openModal = () => {
     window.dispatchEvent(
-      new CustomEvent('openMathModal', {
+      new CustomEvent("openMathModal", {
         detail: {
           latex: latexWithPlaceholders,
           id,
@@ -125,61 +127,61 @@ const MathBlockWrapper = ({ node, updateAttributes }: NodeViewProps) => {
 };
 
 // ---------- Extension ----------
-declare module '@tiptap/core' {
+declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     mathBlock: {
       addMathBlock: (attributes?: {
         latex?: string;
         id?: string;
-        alignment?: 'left' | 'center' | 'right';
+        alignment?: "left" | "center" | "right";
         matrices?: Record<string, MatrixRec>;
       }) => ReturnType;
       setMathBlockAlignment: (
-        alignment: 'left' | 'center' | 'right'
+        alignment: "left" | "center" | "right"
       ) => ReturnType;
     };
   }
 }
 
 export const MathExtension = Node.create({
-  name: 'mathBlock',
-  group: 'block',
+  name: "mathBlock",
+  group: "block",
   atom: true,
 
   addAttributes() {
     return {
       latex: {
-        default: '',
-        parseHTML: (element) => element.getAttribute('data-latex') || '',
-        renderHTML: (attributes) => ({ 'data-latex': attributes.latex }),
+        default: "",
+        parseHTML: (element) => element.getAttribute("data-latex") || "",
+        renderHTML: (attributes) => ({ "data-latex": attributes.latex }),
       },
       matrices: {
         default: {},
         parseHTML: (element) => {
-          const raw = element.getAttribute('data-matrices');
+          const raw = element.getAttribute("data-matrices");
           if (!raw) return {};
           try {
             const parsed = JSON.parse(raw);
-            return parsed && typeof parsed === 'object' ? parsed : {};
+            return parsed && typeof parsed === "object" ? parsed : {};
           } catch {
             return {};
           }
         },
         renderHTML: (attributes) => ({
-          'data-matrices': JSON.stringify(attributes.matrices || {}),
+          "data-matrices": JSON.stringify(attributes.matrices || {}),
         }),
       },
       id: {
         default: () => uuidv4(),
-        parseHTML: (element) => element.getAttribute('data-id') || uuidv4(),
-        renderHTML: (attributes) => ({ 'data-id': attributes.id }),
+        parseHTML: (element) => element.getAttribute("data-id") || uuidv4(),
+        renderHTML: (attributes) => ({ "data-id": attributes.id }),
       },
       alignment: {
-        default: 'left',
+        default: "left",
         parseHTML: (element) =>
-          element.getAttribute('data-alignment') || 'left',
+          element.getAttribute("data-alignment") || "left",
         renderHTML: (attributes) => ({
-          'data-alignment': attributes.alignment,
+          "data-alignment": attributes.alignment,
         }),
       },
     };
@@ -190,15 +192,15 @@ export const MathExtension = Node.create({
       {
         tag: 'div[data-type="math-block"]',
         getAttrs: (element: HTMLElement) => ({
-          latex: element.getAttribute('data-latex') || '',
-          id: element.getAttribute('data-id') || uuidv4(),
-          alignment: element.getAttribute('data-alignment') || 'left',
+          latex: element.getAttribute("data-latex") || "",
+          id: element.getAttribute("data-id") || uuidv4(),
+          alignment: element.getAttribute("data-alignment") || "left",
           matrices: (() => {
-            const raw = element.getAttribute('data-matrices');
+            const raw = element.getAttribute("data-matrices");
             if (!raw) return {};
             try {
               const parsed = JSON.parse(raw);
-              return parsed && typeof parsed === 'object' ? parsed : {};
+              return parsed && typeof parsed === "object" ? parsed : {};
             } catch {
               return {};
             }
@@ -209,42 +211,42 @@ export const MathExtension = Node.create({
   },
 
   renderHTML({ HTMLAttributes, node }) {
-    const latexWithPlaceholders = node.attrs.latex || '';
-    const alignment = node.attrs.alignment || 'left';
+    const latexWithPlaceholders = node.attrs.latex || "";
+    const alignment = node.attrs.alignment || "left";
     const matrices = (node.attrs.matrices as Record<string, MatrixRec>) || {};
 
-    let html = '';
+    let html = "";
     try {
       const expanded = expandForDisplay(latexWithPlaceholders, matrices);
       const alignedSrc = expanded
-        ? `\\begin{aligned}${expanded}\\end{aligned}`
-        : '';
+        ? `\\begin{gathered}${expanded}\\end{gathered}`
+        : "";
       html = katex.renderToString(alignedSrc, {
         throwOnError: false,
         displayMode: true,
-        strict: 'ignore',
+        strict: "ignore",
       });
     } catch (e) {
-      console.error('KaTeX rendering error:', e);
-      html = '<span>Error rendering LaTeX</span>';
+      console.error("KaTeX rendering error:", e);
+      html = "<span>Error rendering LaTeX</span>";
     }
 
     return [
-      'div',
+      "div",
       {
-        'data-type': 'math-block',
-        'data-id': node.attrs.id,
-        'data-alignment': alignment,
-        'data-latex': latexWithPlaceholders,
-        'data-matrices': JSON.stringify(matrices || {}),
+        "data-type": "math-block",
+        "data-id": node.attrs.id,
+        "data-alignment": alignment,
+        "data-latex": latexWithPlaceholders,
+        "data-matrices": JSON.stringify(matrices || {}),
         class: `math-block inline-block prose-lg katex-container align-${alignment}`,
         ...mergeAttributes(HTMLAttributes),
       },
       [
-        'div',
-        { class: 'katex-render', dangerouslySetInnerHTML: { __html: html } },
+        "div",
+        { class: "katex-render", dangerouslySetInnerHTML: { __html: html } },
       ],
-      ['p', { hidden: true, class: 'raw-latex' }, latexWithPlaceholders],
+      ["p", { hidden: true, class: "raw-latex" }, latexWithPlaceholders],
     ];
   },
 
@@ -260,15 +262,15 @@ export const MathExtension = Node.create({
           commands.insertContent({
             type: this.name,
             attrs: {
-              latex: attributes?.latex ?? '',
+              latex: attributes?.latex ?? "",
               matrices: attributes?.matrices ?? {},
               id: attributes?.id ?? uuidv4(),
-              alignment: attributes?.alignment ?? 'left',
+              alignment: attributes?.alignment ?? "left",
             },
           }),
 
       setMathBlockAlignment:
-        (alignment: 'left' | 'center' | 'right') =>
+        (alignment: "left" | "center" | "right") =>
         ({ state, dispatch }) => {
           if (!dispatch) return false;
           const { selection } = state;
@@ -289,7 +291,7 @@ export const MathExtension = Node.create({
   },
 
   addKeyboardShortcuts() {
-    return { 'Mod-Shift-M': () => this.editor.commands.addMathBlock() };
+    return { "Mod-Shift-M": () => this.editor.commands.addMathBlock() };
   },
 });
 
