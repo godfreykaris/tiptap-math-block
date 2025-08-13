@@ -1,0 +1,87 @@
+{
+  "name": "@godfreykaris/tiptap-math-block",
+  "version": "1.0.0",
+  "description": "A TipTap extension + React NodeView for editable math blocks (MathQuill + KaTeX)",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build:css": "tailwindcss -i ./src/index.css -o ./dist/style.css --minify --content \"src/**/*.{ts,tsx,js,jsx,html}\"",
+    "build": "npm run clean && npm run build:css && tsup src/index.ts --dts --format esm",
+    "prepare": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:browser": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/godfreykaris/tiptap-math-block.git"
+  },
+  "keywords": [
+    "tiptap",
+    "tiptap-extension",
+    "math",
+    "mathquill",
+    "katex",
+    "react",
+    "math-block"
+  ],
+  "author": "Godfrey Kariuki",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@tiptap/core": "^3.0.9",
+    "@tiptap/react": "^3.0.9",
+    "katex": "^0.16.22",
+    "mathquill": "^0.10.1-a",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@tiptap/starter-kit": "^3.0.9",
+    "@types/jquery": "^3.5.32",
+    "@types/node": "^24.2.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jsdom": "^26.1.0",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.10",
+    "tailwindcss": "^4.1.11",
+    "tsup": "^8.5.0",
+    "typescript": "~5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "overrides": {
+    "jquery": "^3.7.1",
+    "glob": "^9.3.0",
+    "inflight": "^1.0.6",
+    "source-map": "^0.7.4"
+  },
+  "bugs": {
+    "url": "https://github.com/godfreykaris/tiptap-math-block/issues"
+  },
+  "homepage": "https://github.com/godfreykaris/tiptap-math-block#readme",
+  "files": [
+    "dist",
+    "!dist/*.cjs.js"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.11",
+    "prop-types": "^15.8.1",
+    "uuid": "^11.1.0"
+  }
+}

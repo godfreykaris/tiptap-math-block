@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+
+/* Remove border for non-focused editable math fields */
+.mq-editable-field {
+  border: none !important; /* Override default border */
+}
+
+/* Restore or customize border when the field is focused */
+.mq-editable-field:focus,
+.mq-editable-field.mq-focused {
+  border: 0px solid #000 !important; /* Example: black border when focused */
+}
+
+/* Don't clip tall glyphs like nthroot indices */
+.mq-editable-field,
+.mq-editable-field * {
+  overflow: visible !important;
+}
+
+/* Give the line a bit more vertical room */
+.mq-editable-field,
+.mq-editable-field .mq-root-block {
+  line-height: 1.35; /* tweak 1.3–1.45 as needed */
+  padding-top: 0.15em; /* tiny headroom */
+  padding-bottom: 0.05em; /* keep baseline nice */
+}
