@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from "react";
 
 type SectionProps = {
   children?: React.ReactNode;
@@ -34,12 +34,12 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
   };
 
   const btn =
-    'h-9 min-w-9 px-1.5 rounded-lg border text-sm font-medium ' +
-    'border-zinc-300/70 dark:border-zinc-700/70 ' +
-    'bg-white/70 dark:bg-zinc-900/60 ' +
-    'hover:bg-indigo-50 dark:hover:bg-zinc-800 ' +
-    'focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ' +
-    'transition-colors';
+    "h-9 min-w-9 px-1.5 rounded-lg border text-sm font-medium " +
+    "border-zinc-300/70 dark:border-zinc-700/70 " +
+    "bg-white/70 dark:bg-zinc-900/60 " +
+    "hover:bg-indigo-50 dark:hover:bg-zinc-800 " +
+    "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 " +
+    "transition-colors";
 
   return (
     <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-950/60 p-3 md:p-4 shadow-sm space-y-4">
@@ -55,7 +55,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
             aria-controls="math-tools-panel"
             className="text-xs inline-flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline"
           >
-            <span>{isExpanded ? 'See Fewer tools' : 'See More tools'}</span>
+            <span>{isExpanded ? "See Fewer tools" : "See More tools"}</span>
             <svg width="12" height="12" viewBox="0 0 20 20" aria-hidden>
               <path
                 d="M6 8l4 4 4-4"
@@ -64,8 +64,8 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 strokeWidth="2"
                 className={
                   isExpanded
-                    ? 'rotate-180 transition-transform'
-                    : 'transition-transform'
+                    ? "rotate-180 transition-transform"
+                    : "transition-transform"
                 }
               />
             </svg>
@@ -76,8 +76,8 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
       <div
         className={
           isExpanded
-            ? 'flex flex-nowrap sm:grid sm:gap-4 md:gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 overflow-x-auto'
-            : 'flex flex-wrap sm:flex-nowrap gap-1 justify-center'
+            ? "flex flex-nowrap sm:grid sm:gap-4 md:gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 overflow-x-auto"
+            : "flex flex-wrap sm:flex-nowrap gap-1 justify-center"
         }
       >
         {/* Arithmetic */}
@@ -87,7 +87,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
             aria-label="Insert plus"
             data-testid="insert-plus"
             className={btn}
-            onClick={() => insert('+')}
+            onClick={() => insert("+")}
           >
             +
           </button>
@@ -98,7 +98,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert minus"
                 data-testid="insert-minus"
                 className={btn}
-                onClick={() => insert('-')}
+                onClick={() => insert("-")}
               >
                 −
               </button>
@@ -107,7 +107,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert multiply"
                 data-testid="insert-multiply"
                 className={btn}
-                onClick={() => insert('\\times ')}
+                onClick={() => insert("\\times ")}
               >
                 ×
               </button>
@@ -116,7 +116,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert dot"
                 data-testid="insert-cdot"
                 className={btn}
-                onClick={() => insert('\\cdot ')}
+                onClick={() => insert("\\cdot ")}
               >
                 ·
               </button>
@@ -125,7 +125,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert divide"
                 data-testid="insert-divide"
                 className={btn}
-                onClick={() => insert('\\div ')}
+                onClick={() => insert("\\div ")}
               >
                 ÷
               </button>
@@ -134,7 +134,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert plus-minus"
                 data-testid="insert-pm"
                 className={btn}
-                onClick={() => insert('\\pm ')}
+                onClick={() => insert("\\pm ")}
               >
                 ±
               </button>
@@ -143,7 +143,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert minus-plus"
                 data-testid="insert-mp"
                 className={btn}
-                onClick={() => insert('\\mp ')}
+                onClick={() => insert("\\mp ")}
               >
                 ∓
               </button>
@@ -158,7 +158,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
             aria-label="Insert equals"
             data-testid="insert-equals"
             className={btn}
-            onClick={() => insert('=')}
+            onClick={() => insert("=")}
           >
             =
           </button>
@@ -169,7 +169,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert not equal"
                 data-testid="insert-neq"
                 className={btn}
-                onClick={() => insert('\\neq ')}
+                onClick={() => insert("\\neq ")}
               >
                 ≠
               </button>
@@ -178,7 +178,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert less than"
                 data-testid="insert-lt"
                 className={btn}
-                onClick={() => insert('<')}
+                onClick={() => insert("<")}
               >
                 &lt;
               </button>
@@ -187,7 +187,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert greater than"
                 data-testid="insert-gt"
                 className={btn}
-                onClick={() => insert('>')}
+                onClick={() => insert(">")}
               >
                 &gt;
               </button>
@@ -196,7 +196,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert leq"
                 data-testid="insert-leq"
                 className={btn}
-                onClick={() => insert('\\leq ')}
+                onClick={() => insert("\\leq ")}
               >
                 ≤
               </button>
@@ -205,7 +205,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert geq"
                 data-testid="insert-geq"
                 className={btn}
-                onClick={() => insert('\\geq ')}
+                onClick={() => insert("\\geq ")}
               >
                 ≥
               </button>
@@ -220,7 +220,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
             aria-label="Insert square root"
             data-testid="insert-sqrt"
             className={btn}
-            onClick={() => insert('\\sqrt{}')}
+            onClick={() => insert("\\sqrt{}")}
           >
             √
           </button>
@@ -231,7 +231,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert cube root"
                 data-testid="insert-cuberoot"
                 className={btn}
-                onClick={() => insert('\\sqrt[3]{}')}
+                onClick={() => insert("\\sqrt[3]{}")}
               >
                 ∛
               </button>
@@ -240,7 +240,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert nth root"
                 data-testid="insert-nthroot"
                 className={btn}
-                onClick={() => insert('\\sqrt[{}]{}')}
+                onClick={() => insert("\\sqrt[{}]{}")}
               >
                 ⁿ√
               </button>
@@ -249,7 +249,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert power"
                 data-testid="insert-power"
                 className={btn}
-                onClick={() => insert('^{}')}
+                onClick={() => insert("^{}")}
               >
                 xⁿ
               </button>
@@ -258,7 +258,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert subscript"
                 data-testid="insert-subscript"
                 className={btn}
-                onClick={() => insert('_{}')}
+                onClick={() => insert("_{}")}
               >
                 xₙ
               </button>
@@ -267,7 +267,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert fraction"
                 data-testid="insert-fraction"
                 className={btn}
-                onClick={() => insert('\\frac{}{}')}
+                onClick={() => insert("\\frac{}{}")}
               >
                 a/b
               </button>
@@ -276,7 +276,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert binomial"
                 data-testid="insert-binom"
                 className={btn}
-                onClick={() => insert('\\binom{}{}')}
+                onClick={() => insert("\\binom{}{}")}
               >
                 nCk
               </button>
@@ -291,7 +291,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
             aria-label="Insert parentheses"
             data-testid="insert-parens"
             className={btn}
-            onClick={() => insert('\\left( \\right)')}
+            onClick={() => insert("\\left( \\right)")}
           >
             ( )
           </button>
@@ -302,7 +302,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert brackets"
                 data-testid="insert-brackets"
                 className={btn}
-                onClick={() => insert('\\left[ \\right]')}
+                onClick={() => insert("\\left[ \\right]")}
               >
                 [ ]
               </button>
@@ -311,16 +311,16 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert braces"
                 data-testid="insert-braces"
                 className={btn}
-                onClick={() => insert('\\left\\{ \\right\\}')}
+                onClick={() => insert("\\left\\{ \\right\\}")}
               >
-                {'{ }'}
+                {"{ }"}
               </button>
               <button
                 type="button"
                 aria-label="Insert absolute value"
                 data-testid="insert-abs"
                 className={btn}
-                onClick={() => insert('\\left| \\right|')}
+                onClick={() => insert("\\left| \\right|")}
               >
                 |x|
               </button>
@@ -329,7 +329,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert norm"
                 data-testid="insert-norm"
                 className={btn}
-                onClick={() => insert('\\left\\lVert \\right\\rVert')}
+                onClick={() => insert("\\left\\lVert \\right\\rVert")}
               >
                 ‖x‖
               </button>
@@ -338,7 +338,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert floor"
                 data-testid="insert-floor"
                 className={btn}
-                onClick={() => insert('\\left\\lfloor \\right\\rfloor')}
+                onClick={() => insert("\\left\\lfloor \\right\\rfloor")}
               >
                 ⌊x⌋
               </button>
@@ -347,7 +347,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert ceil"
                 data-testid="insert-ceil"
                 className={btn}
-                onClick={() => insert('\\left\\lceil \\right\\rceil')}
+                onClick={() => insert("\\left\\lceil \\right\\rceil")}
               >
                 ⌈x⌉
               </button>
@@ -362,7 +362,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
             aria-label="Insert sin"
             data-testid="insert-sin"
             className={btn}
-            onClick={() => insert('\\sin ')}
+            onClick={() => insert("\\sin ")}
           >
             sin
           </button>
@@ -373,7 +373,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert cos"
                 data-testid="insert-cos"
                 className={btn}
-                onClick={() => insert('\\cos ')}
+                onClick={() => insert("\\cos ")}
               >
                 cos
               </button>
@@ -382,7 +382,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert tan"
                 data-testid="insert-tan"
                 className={btn}
-                onClick={() => insert('\\tan ')}
+                onClick={() => insert("\\tan ")}
               >
                 tan
               </button>
@@ -391,7 +391,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert arcsin"
                 data-testid="insert-arcsin"
                 className={btn}
-                onClick={() => insert('\\arcsin ')}
+                onClick={() => insert("\\arcsin ")}
               >
                 arcsin
               </button>
@@ -400,7 +400,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert arccos"
                 data-testid="insert-arccos"
                 className={btn}
-                onClick={() => insert('\\arccos ')}
+                onClick={() => insert("\\arccos ")}
               >
                 arccos
               </button>
@@ -409,7 +409,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert arctan"
                 data-testid="insert-arctan"
                 className={btn}
-                onClick={() => insert('\\arctan ')}
+                onClick={() => insert("\\arctan ")}
               >
                 arctan
               </button>
@@ -418,7 +418,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert log"
                 data-testid="insert-log"
                 className={btn}
-                onClick={() => insert('\\log ')}
+                onClick={() => insert("\\log ")}
               >
                 log
               </button>
@@ -427,7 +427,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert log base"
                 data-testid="insert-log-base"
                 className={btn}
-                onClick={() => insert('\\log_{} ')}
+                onClick={() => insert("\\log_{} ")}
               >
                 log₍₎
               </button>
@@ -436,7 +436,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert natural log"
                 data-testid="insert-ln"
                 className={btn}
-                onClick={() => insert('\\ln ')}
+                onClick={() => insert("\\ln ")}
               >
                 ln
               </button>
@@ -445,7 +445,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert exp"
                 data-testid="insert-exp"
                 className={btn}
-                onClick={() => insert('e^{}')}
+                onClick={() => insert("e^{}")}
               >
                 eˣ
               </button>
@@ -460,7 +460,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
             aria-label="Insert pi"
             data-testid="insert-pi"
             className={btn}
-            onClick={() => insert('\\pi ')}
+            onClick={() => insert("\\pi ")}
           >
             π
           </button>
@@ -471,7 +471,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert theta"
                 data-testid="insert-theta"
                 className={btn}
-                onClick={() => insert('\\theta ')}
+                onClick={() => insert("\\theta ")}
               >
                 θ
               </button>
@@ -480,7 +480,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert alpha"
                 data-testid="insert-alpha"
                 className={btn}
-                onClick={() => insert('\\alpha ')}
+                onClick={() => insert("\\alpha ")}
               >
                 α
               </button>
@@ -489,7 +489,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert beta"
                 data-testid="insert-beta"
                 className={btn}
-                onClick={() => insert('\\beta ')}
+                onClick={() => insert("\\beta ")}
               >
                 β
               </button>
@@ -498,7 +498,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert lambda"
                 data-testid="insert-lambda"
                 className={btn}
-                onClick={() => insert('\\lambda ')}
+                onClick={() => insert("\\lambda ")}
               >
                 λ
               </button>
@@ -507,7 +507,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert mu"
                 data-testid="insert-mu"
                 className={btn}
-                onClick={() => insert('\\mu ')}
+                onClick={() => insert("\\mu ")}
               >
                 μ
               </button>
@@ -516,7 +516,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert infinity"
                 data-testid="insert-infty"
                 className={btn}
-                onClick={() => insert('\\infty ')}
+                onClick={() => insert("\\infty ")}
               >
                 ∞
               </button>
@@ -531,7 +531,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
             aria-label="Insert sum"
             data-testid="insert-sum"
             className={btn}
-            onClick={() => insert('\\sum_{}^{} ')}
+            onClick={() => insert("\\sum_{}^{} ")}
           >
             Σ
           </button>
@@ -542,7 +542,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert product"
                 data-testid="insert-prod"
                 className={btn}
-                onClick={() => insert('\\prod_{}^{} ')}
+                onClick={() => insert("\\prod_{}^{} ")}
               >
                 ∏
               </button>
@@ -551,7 +551,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert limit"
                 data-testid="insert-limit"
                 className={btn}
-                onClick={() => insert('\\lim_{x \\to } ')}
+                onClick={() => insert("\\lim_{x \\to } ")}
               >
                 lim
               </button>
@@ -560,7 +560,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert to"
                 data-testid="insert-to"
                 className={btn}
-                onClick={() => insert('\\to ')}
+                onClick={() => insert("\\to ")}
               >
                 →
               </button>
@@ -569,7 +569,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert implies"
                 data-testid="insert-implies"
                 className={btn}
-                onClick={() => insert('\\implies ')}
+                onClick={() => insert("\\implies ")}
               >
                 ⇒
               </button>
@@ -578,7 +578,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert iff"
                 data-testid="insert-iff"
                 className={btn}
-                onClick={() => insert('\\iff ')}
+                onClick={() => insert("\\iff ")}
               >
                 ⇔
               </button>
@@ -587,7 +587,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert mapsto"
                 data-testid="insert-mapsto"
                 className={btn}
-                onClick={() => insert('\\mapsto ')}
+                onClick={() => insert("\\mapsto ")}
               >
                 ↦
               </button>
@@ -602,7 +602,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
             aria-label="Insert integral"
             data-testid="insert-int"
             className={btn}
-            onClick={() => insert('\\int_{}^{} ')}
+            onClick={() => insert("\\int_{}^{} ")}
           >
             ∫
           </button>
@@ -613,7 +613,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert double integral"
                 data-testid="insert-iint"
                 className={btn}
-                onClick={() => insert('\\iint_{}^{} ')}
+                onClick={() => insert("\\iint_{}^{} ")}
               >
                 ∬
               </button>
@@ -622,7 +622,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert triple integral"
                 data-testid="insert-iiint"
                 className={btn}
-                onClick={() => insert('\\iiint_{}^{} ')}
+                onClick={() => insert("\\iiint_{}^{} ")}
               >
                 ∭
               </button>
@@ -631,7 +631,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert derivative"
                 data-testid="insert-derivative"
                 className={btn}
-                onClick={() => insert('\\frac{d}{dx}\\left( \\right)')}
+                onClick={() => insert("\\frac{d}{dx}\\left( \\right)")}
               >
                 d/dx( )
               </button>
@@ -641,7 +641,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 data-testid="insert-partial"
                 className={btn}
                 onClick={() =>
-                  insert('\\frac{\\partial}{\\partial x}\\left( \\right)')
+                  insert("\\frac{\\partial}{\\partial x}\\left( \\right)")
                 }
               >
                 ∂/∂x( )
@@ -651,7 +651,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert nabla"
                 data-testid="insert-nabla"
                 className={btn}
-                onClick={() => insert('\\nabla ')}
+                onClick={() => insert("\\nabla ")}
               >
                 ∇
               </button>
@@ -660,7 +660,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert evaluated bar"
                 data-testid="insert-evalbar"
                 className={btn}
-                onClick={() => insert('\\Big|_{a}^{b}')}
+                onClick={() => insert("\\Big|_{a}^{b}")}
               >
                 |ᵃ_b
               </button>
@@ -669,7 +669,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert dx"
                 data-testid="insert-dx"
                 className={btn}
-                onClick={() => insert('\\,dx')}
+                onClick={() => insert("\\,dx")}
               >
                 dx
               </button>
@@ -684,7 +684,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
             aria-label="Insert vector"
             data-testid="insert-vec"
             className={btn}
-            onClick={() => insert('\\vec {}')}
+            onClick={() => insert("\\vec {}")}
           >
             →x
           </button>
@@ -695,7 +695,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert hat"
                 data-testid="insert-hat"
                 className={btn}
-                onClick={() => insert('\\hat{}')}
+                onClick={() => insert("\\hat{}")}
               >
                 x̂
               </button>
@@ -704,7 +704,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert bar"
                 data-testid="insert-bar"
                 className={btn}
-                onClick={() => insert('\\bar{}')}
+                onClick={() => insert("\\bar{}")}
               >
                 x̄
               </button>
@@ -713,7 +713,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert tilde"
                 data-testid="insert-tilde"
                 className={btn}
-                onClick={() => insert('\\tilde{}')}
+                onClick={() => insert("\\tilde{}")}
               >
                 x̃
               </button>
@@ -722,7 +722,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert overline"
                 data-testid="insert-overline"
                 className={btn}
-                onClick={() => insert('\\overline{}')}
+                onClick={() => insert("\\overline{}")}
               >
                 overline
               </button>
@@ -731,7 +731,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert underline"
                 data-testid="insert-underline"
                 className={btn}
-                onClick={() => insert('\\underline{}')}
+                onClick={() => insert("\\underline{}")}
               >
                 underline
               </button>
@@ -743,12 +743,13 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
         <Section>
           {isExpanded && (
             <>
+              {/* Sets */}
               <button
                 type="button"
                 aria-label="Insert reals"
                 data-testid="insert-reals"
                 className={btn}
-                onClick={() => insert('\\mathbb{R} ')}
+                onClick={() => insert("ℝ ")}
               >
                 ℝ
               </button>
@@ -757,7 +758,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert naturals"
                 data-testid="insert-nats"
                 className={btn}
-                onClick={() => insert('\\mathbb{N} ')}
+                onClick={() => insert("ℕ ")}
               >
                 ℕ
               </button>
@@ -766,7 +767,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert integers"
                 data-testid="insert-ints"
                 className={btn}
-                onClick={() => insert('\\mathbb{Z} ')}
+                onClick={() => insert("ℤ ")}
               >
                 ℤ
               </button>
@@ -775,7 +776,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert rationals"
                 data-testid="insert-rats"
                 className={btn}
-                onClick={() => insert('\\mathbb{Q} ')}
+                onClick={() => insert("ℚ ")}
               >
                 ℚ
               </button>
@@ -784,34 +785,28 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert complexes"
                 data-testid="insert-complex"
                 className={btn}
-                onClick={() => insert('\\mathbb{C} ')}
+                onClick={() => insert("ℂ ")}
               >
                 ℂ
               </button>
+
+              {/* Statistics */}
               <button
                 type="button"
                 aria-label="Insert probability"
                 data-testid="insert-prob"
                 className={btn}
-                onClick={() => insert('\\mathbb{P}(\\ )')}
+                onClick={() => insert("\\Pr\\left(\\right)")}
               >
                 P( )
               </button>
-              <button
-                type="button"
-                aria-label="Insert expectation"
-                data-testid="insert-expect"
-                className={btn}
-                onClick={() => insert('\\mathbb{E}[\\ ]')}
-              >
-                E[ ]
-              </button>
+
               <button
                 type="button"
                 aria-label="Insert variance"
                 data-testid="insert-var"
                 className={btn}
-                onClick={() => insert('\\operatorname{Var}(\\ )')}
+                onClick={() => insert("\\mathrm{Var}\\left(\\right)")}
               >
                 Var( )
               </button>
@@ -820,7 +815,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert covariance"
                 data-testid="insert-cov"
                 className={btn}
-                onClick={() => insert('\\operatorname{Cov}(\\ ,\\ )')}
+                onClick={() => insert("\\mathrm{Cov}\\left(\\ ,\\ \\right)")}
               >
                 Cov( , )
               </button>
@@ -837,7 +832,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert in"
                 data-testid="insert-in"
                 className={btn}
-                onClick={() => insert('\\in ')}
+                onClick={() => insert("\\in ")}
               >
                 ∈
               </button>
@@ -846,7 +841,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert notin"
                 data-testid="insert-notin"
                 className={btn}
-                onClick={() => insert('\\notin ')}
+                onClick={() => insert("\\notin ")}
               >
                 ∉
               </button>
@@ -855,7 +850,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert subseteq"
                 data-testid="insert-subseteq"
                 className={btn}
-                onClick={() => insert('\\subseteq ')}
+                onClick={() => insert("\\subseteq ")}
               >
                 ⊆
               </button>
@@ -864,7 +859,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert supseteq"
                 data-testid="insert-supseteq"
                 className={btn}
-                onClick={() => insert('\\supseteq ')}
+                onClick={() => insert("\\supseteq ")}
               >
                 ⊇
               </button>
@@ -873,7 +868,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert union"
                 data-testid="insert-cup"
                 className={btn}
-                onClick={() => insert('\\cup ')}
+                onClick={() => insert("\\cup ")}
               >
                 ∪
               </button>
@@ -882,7 +877,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert intersection"
                 data-testid="insert-cap"
                 className={btn}
-                onClick={() => insert('\\cap ')}
+                onClick={() => insert("\\cap ")}
               >
                 ∩
               </button>
@@ -891,7 +886,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert empty set"
                 data-testid="insert-emptyset"
                 className={btn}
-                onClick={() => insert('\\emptyset ')}
+                onClick={() => insert("\\emptyset ")}
               >
                 ∅
               </button>
@@ -900,7 +895,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert forall"
                 data-testid="insert-forall"
                 className={btn}
-                onClick={() => insert('\\forall ')}
+                onClick={() => insert("\\forall ")}
               >
                 ∀
               </button>
@@ -909,7 +904,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert exists"
                 data-testid="insert-exists"
                 className={btn}
-                onClick={() => insert('\\exists ')}
+                onClick={() => insert("\\exists ")}
               >
                 ∃
               </button>
@@ -918,7 +913,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert land"
                 data-testid="insert-land"
                 className={btn}
-                onClick={() => insert('\\land ')}
+                onClick={() => insert("\\land ")}
               >
                 ∧
               </button>
@@ -927,7 +922,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert lor"
                 data-testid="insert-lor"
                 className={btn}
-                onClick={() => insert('\\lor ')}
+                onClick={() => insert("\\lor ")}
               >
                 ∨
               </button>
@@ -936,7 +931,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert neg"
                 data-testid="insert-neg"
                 className={btn}
-                onClick={() => insert('\\neg ')}
+                onClick={() => insert("\\neg ")}
               >
                 ¬
               </button>
@@ -953,7 +948,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert degree"
                 data-testid="insert-degree"
                 className={btn}
-                onClick={() => insert('^{\\circ}')}
+                onClick={() => insert("^{\\circ}")}
               >
                 °
               </button>
@@ -962,7 +957,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert angle"
                 data-testid="insert-angle"
                 className={btn}
-                onClick={() => insert('\\angle ')}
+                onClick={() => insert("\\angle ")}
               >
                 ∠
               </button>
@@ -971,7 +966,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert perpendicular"
                 data-testid="insert-perp"
                 className={btn}
-                onClick={() => insert('\\perp ')}
+                onClick={() => insert("\\perp ")}
               >
                 ⟂
               </button>
@@ -980,7 +975,7 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
                 aria-label="Insert parallel"
                 data-testid="insert-parallel"
                 className={btn}
-                onClick={() => insert('\\parallel ')}
+                onClick={() => insert("\\parallel ")}
               >
                 ∥
               </button>
@@ -1029,5 +1024,5 @@ const MathToolbar: React.FC<MathToolbarProps> = ({ onStartInsertMatrix }) => {
   );
 };
 
-MathToolbar.displayName = 'MathToolbar';
+MathToolbar.displayName = "MathToolbar";
 export default memo(MathToolbar);

@@ -10,6 +10,7 @@ A ready-to-use **Tiptap extension** and **React components** for editing LaTeX m
 - 🧹 **Helper function** to safely insert new math blocks without overwriting the selected one.
 - 🔌 **Bridge hook** that wires the extension to the modal with zero boilerplate.
 - 📦 Works with **Tiptap 2 + React**.
+- 🔒 **Security Note:** This package uses [MathQuill](http://mathquill.com/), which historically depended on an older version of jQuery. We apply an **override to force jQuery 3.7.1** (the latest safe version) to eliminate known vulnerabilities.
 
 ---
 
@@ -26,6 +27,8 @@ Peer dependencies (make sure you have them installed):
 ```bash
 npm install @tiptap/react @tiptap/starter-kit @tiptap/pm katex react react-dom
 ```
+
+If your project’s security scanner flags jQuery vulnerabilities when installing MathQuill, note that **this package overrides MathQuill’s old jQuery requirement to use 3.7.1**. Consumers should add their own override/resolution in their app if they still see warnings.
 
 ---
 
@@ -90,7 +93,7 @@ addMathBlockAfterSelection(editor, "x = \\square");
 ```
 
 - **`editor`** → Your Tiptap `Editor` instance
-- **`initialLatex`** _(optional)_ → Starter LaTeX for the new block (defaults to `x = \square`).
+- **`initialLatex`** _(optional)_ → Starter LaTeX for the new block (defaults to `x = \\square`).
 
 The helper ensures that:
 
@@ -155,19 +158,18 @@ If you render on the server, guard browser-only APIs (like `window`) and only mo
 
 ---
 
-## FAQ
+## Security & MathQuill Dependency
 
-**Q: The new math block is empty. Can I set a default?**
+MathQuill’s `package.json` specifies `jquery: ^1.12.3`, which can trigger vulnerability warnings. In this package, we:
 
-A: Yes. Pass a second argument to the helper, e.g. `addMathBlockAfterSelection(editor, 'x = \\square')`.
+- Apply `"overrides": { "jquery": "3.7.1" }` to force a modern, secure jQuery.
+- Verify via `npm ls jquery` that only `3.7.1` is installed.
 
-**Q: My linter complains about `prosemirror-state` as an extraneous dependency.**
+If you are a consumer of this package and still see warnings:
 
-A: Import from `@tiptap/pm/state` instead, or add `prosemirror-state` to your project.
-
-**Q: Can I open the modal immediately after inserting the block?**
-
-A: You can dispatch a custom event or extend the command to open it right away. The package exposes the modal bridge so it’s easy to wire up.
+- Add a `resolutions` (Yarn) or `overrides` (npm/pnpm) entry for jQuery 3.7.1 in your own `package.json`.
+- Clear your lockfile and reinstall.
+- Ensure your security scanner checks **resolved** versions, not just declared ranges.
 
 ---
 
