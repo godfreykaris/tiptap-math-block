@@ -3,13 +3,21 @@
 // Components
 export { default as MathModal } from "./components/MathModal";
 
-// Extension
-// If MathExtension.tsx has `export default`, use the line below.
-// If it has `export const MathExtension = ...`, change this to `export { MathExtension } ...`
+// Extensions
+// If these files use `export default`, keep the default re-export.
+// If they use named exports (`export const ...`), adjust accordingly.
 export { default as MathExtension } from "./extensions/MathExtension";
+export { default as MathInlineExtension } from "./extensions/MathInlineExtension";
 
-// Helper
-export { default as addMathBlockAfterSelection } from "./lib/mathBlockHelpers";
+// Helpers
+export {
+  default as addMathBlockOnNextLine,
+  addMathInlineAtSelection,
+} from "./lib/mathBlockHelpers";
 
 // Hook
 export { default as useMathModalBridge } from "./hooks/useMathModalBridge";
+
+// --- Side-effect imports to ensure typings (command augmentations) are pulled into DTS ---
+import "./extensions/MathExtension";
+import "./extensions/MathInlineExtension";
