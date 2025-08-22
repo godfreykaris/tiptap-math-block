@@ -1,13 +1,14 @@
-# Tiptap Math Block Extension
+# Tiptap Math Extension
 
-A ready-to-use **Tiptap extension** and **React components** for editing LaTeX math blocks with a modal editor, KaTeX rendering, and matrix editing support.
+A ready-to-use **Tiptap extension** and **React components** for editing LaTeX math (block **and inline**) with a modal editor, KaTeX rendering, spacebar support, and matrix editing.
 
 ## Features
 
 - ✏️ **Inline and block math editing** with [KaTeX](https://katex.org/) rendering.
 - 🧮 **Matrix editor** with visual previews and `⟦M1⟧` placeholders.
 - 🔄 **Undo/Redo** support inside the modal (`Ctrl/Cmd+Z` and `Shift+Ctrl/Cmd+Z`).
-- 🧹 **Helper function** to safely insert new math blocks without overwriting the selected one.
+- ␣ **Spacebar inserts spaces** inside math fields (`\\ `), so you can format equations naturally.
+- 🧹 **Helper functions** to safely insert new math blocks/inline nodes without overwriting the selected one.
 - 🔌 **Bridge hook** that wires the extension to the modal with zero boilerplate.
 - 📦 Works with **Tiptap 2 + React**.
 - 🔒 **Security Note:** This package uses [MathQuill](http://mathquill.com/), which historically depended on an older version of jQuery. We apply an **override to force jQuery 3.7.1** (the latest safe version) to eliminate known vulnerabilities.
@@ -46,8 +47,10 @@ import StarterKit from "@tiptap/starter-kit";
 
 import {
   MathExtension,
+  MathInlineExtension,
   MathModal,
   addMathBlockAfterSelection,
+  addMathInlineAtSelection,
   useMathModalBridge,
 } from "@godfreykaris/tiptap-math-block";
 ```
@@ -57,8 +60,8 @@ import {
 ```tsx
 const MyMathEditor = () => {
   const editor = useEditor({
-    extensions: [StarterKit, MathExtension],
-    content: `<p>Example content before math block</p>`,
+    extensions: [StarterKit, MathExtension, MathInlineExtension],
+    content: `<p>Example content before math block and <span data-type="math-inline" data-latex="a^2+b^2=c^2"></span></p>`,
   });
 
   // Hook that syncs open/close state with MathModal
@@ -75,6 +78,13 @@ const MyMathEditor = () => {
         Add Math Block
       </button>
 
+      <button
+        type="button"
+        onClick={() => editor && addMathInlineAtSelection(editor, "y = mx + b")}
+      >
+        Add Inline Math
+      </button>
+
       <EditorContent editor={editor} />
 
       {/* Modal for editing math */}
@@ -84,21 +94,24 @@ const MyMathEditor = () => {
 };
 ```
 
-### 3) Adding a new math block
+### 3) Adding a new math block or inline math
 
-Use `addMathBlockAfterSelection(editor, initialLatex)` to insert a new block.
+- **Block math**
 
-```ts
-addMathBlockAfterSelection(editor, "x = \\square");
-```
+  ```ts
+  addMathBlockAfterSelection(editor, "x = \\square");
+  ```
 
-- **`editor`** → Your Tiptap `Editor` instance
-- **`initialLatex`** _(optional)_ → Starter LaTeX for the new block (defaults to `x = \\square`).
+- **Inline math**
 
-The helper ensures that:
+  ```ts
+  addMathInlineAtSelection(editor, "a^2 + b^2 = c^2");
+  ```
 
-- If a math block is currently selected, the new one is inserted **after** it (not replacing it).
-- The new block starts with your placeholder LaTeX.
+**Notes:**
+
+- Both helpers ensure insertion after selection without overwriting nodes.
+- Inline math works seamlessly inside paragraphs or text spans.
 
 ---
 
@@ -106,8 +119,8 @@ The helper ensures that:
 
 `useMathModalBridge()`:
 
-- Listens for `openMathModal` events emitted by the extension's NodeView when you click a math block.
-- Returns `modalProps` containing everything `<MathModal />` needs: `isOpen`, `onClose`, `initialLatex`, `initialMatrices`, `onSave`, and `id`.
+- Listens for `openMathModal` events emitted by the extension's NodeView when you click a math block or inline math.
+- Returns `modalProps` containing everything `<MathModal />` needs: `isOpen`, `onClose`, `initialLatex`, `initialMatrices`, `onSave`, `id`, and `mode` (block/inline).
 - Keeps your `App.tsx` lean and package-friendly.
 
 ---
@@ -124,6 +137,18 @@ Safely inserts a new math block after the selection and seeds it with `initialLa
 
 ```ts
 addMathBlockAfterSelection(editor, "a^2 + b^2 = c^2");
+```
+
+### `addMathInlineAtSelection(editor, initialLatex?)`
+
+Safely inserts a new inline math node at the selection and seeds it with `initialLatex`.
+
+**Returns:** `boolean` — whether the command ran.
+
+**Example:**
+
+```ts
+addMathInlineAtSelection(editor, "E = mc^2");
 ```
 
 ---
@@ -170,6 +195,19 @@ If you are a consumer of this package and still see warnings:
 - Add a `resolutions` (Yarn) or `overrides` (npm/pnpm) entry for jQuery 3.7.1 in your own `package.json`.
 - Clear your lockfile and reinstall.
 - Ensure your security scanner checks **resolved** versions, not just declared ranges.
+
+---
+
+## FAQ
+
+**Q: The new math block is empty. Can I set a default?**
+A: Yes. Pass a second argument to the helper, e.g. `addMathBlockAfterSelection(editor, 'x = \\square')`.
+
+**Q: My linter complains about `prosemirror-state` as an extraneous dependency.**
+A: Import from `@tiptap/pm/state` instead, or add `prosemirror-state` to your project.
+
+**Q: Can I open the modal immediately after inserting the block?**
+A: You can dispatch a custom event or extend the command to open it right away. The package exposes the modal bridge so it’s easy to wire up.
 
 ---
 

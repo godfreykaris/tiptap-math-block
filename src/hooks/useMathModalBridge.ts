@@ -20,6 +20,7 @@ type BridgeState = {
   id: string;
   matrices: Record<string, MatrixRec>;
   onSave: (payload: OnSavePayload) => void;
+  mode: 'inline' | 'block';
 };
 
 export default function useMathModalBridge() {
@@ -29,16 +30,18 @@ export default function useMathModalBridge() {
     id: '',
     matrices: {},
     onSave: () => {},
+    mode: 'block',
   });
 
   useEffect(() => {
     const handleOpenModal = (event: Event) => {
-      const { latex, id, matrices, onSave } = (
+      const { latex, id, matrices, onSave, mode } = (
         event as CustomEvent<{
           latex: string;
           id: string;
           matrices?: Record<string, MatrixRec>;
           onSave: (payload: OnSavePayload) => void;
+          mode?: 'inline' | 'block';
         }>
       ).detail;
 
@@ -48,6 +51,7 @@ export default function useMathModalBridge() {
         id,
         matrices: matrices ?? {},
         onSave,
+        mode: mode ?? 'block',
       });
     };
 
@@ -62,6 +66,7 @@ export default function useMathModalBridge() {
       id: '',
       matrices: {},
       onSave: () => {},
+      mode: 'block',
     });
 
   const modalProps = useMemo(
@@ -72,6 +77,7 @@ export default function useMathModalBridge() {
       initialMatrices: state.matrices,
       onSave: (payload: OnSavePayload) => state.onSave(payload),
       id: state.id,
+      mode: state.mode as 'inline' | 'block',
     }),
     [state]
   );

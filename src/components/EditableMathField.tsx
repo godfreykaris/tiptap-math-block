@@ -58,7 +58,6 @@ const EditableMathField = ({
   lineId,
 }: EditableMathFieldProps) => {
   const spanRef = useRef<HTMLSpanElement>(null);
-
   const { setLine } = useLineContext();
 
   const historyRef = useRef<string[]>([]);
@@ -91,15 +90,12 @@ const EditableMathField = ({
     }
   };
 
-  const teardownRef = useRef<(() => void) | null>(null);
-
   useEffect(() => {
     let mf: MQMathField | null = null;
-    let container: HTMLSpanElement | null = null;
     let mounted = true;
 
     const attachUndoRedo = (mfInstance: MQMathField) => {
-      const f = mfInstance; // avoid no-param-reassign
+      const f = mfInstance;
       f.mqUndoFn = () => {
         if (indexRef.current > 0) {
           indexRef.current -= 1;
@@ -129,7 +125,7 @@ const EditableMathField = ({
         if (mounted && window.MathQuill && spanRef.current) {
           const MQ = window.MathQuill.getInterface(2);
           mf = MQ.MathField(spanRef.current, {
-            spaceBehavesLikeTab: true,
+            spaceBehavesLikeTab: false,
             handlers: {
               edit: () => {
                 if (!mf || isRestoringRef.current) return;
@@ -148,30 +144,16 @@ const EditableMathField = ({
           attachUndoRedo(mf);
 
           window.activeMQField = mf;
-          container = spanRef.current;
           mf.focus();
-
-          const setActive = () => {
-            if (mf) window.activeMQField = mf;
-          };
-
-          container.addEventListener('focusin', setActive);
-          container.addEventListener('mousedown', setActive);
 
           window.mqUndo = () => window.activeMQField?.mqUndoFn?.();
           window.mqRedo = () => window.activeMQField?.mqRedoFn?.();
-
-          teardownRef.current = () => {
-            container?.removeEventListener('focusin', setActive);
-            container?.removeEventListener('mousedown', setActive);
-          };
         }
       })
       .catch(() => {});
 
     return () => {
       mounted = false;
-      teardownRef.current?.();
       if (window.activeMQField === mf) {
         delete window.activeMQField;
       }

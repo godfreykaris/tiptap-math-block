@@ -5,17 +5,17 @@ import React, {
   useEffect,
   useState,
   useCallback,
-} from "react";
-import katex from "katex";
-import MathBlock from "./MathBlock";
-import MathToolbar from "./MathToolbar";
-import type { MathBlockHandle } from "./MathBlock";
-import MathMiniEditor from "./MathMiniEditor";
-import { LineContext, type LineMap } from "./LineContext";
-import "katex/dist/katex.min.css";
+} from 'react';
+import katex from 'katex';
+import MathBlock from './MathBlock';
+import MathToolbar from './MathToolbar';
+import type { MathBlockHandle } from './MathBlock';
+import MathMiniEditor from './MathMiniEditor';
+import { LineContext, type LineMap } from './LineContext';
+import 'katex/dist/katex.min.css';
 
 // Hoisted constants
-const BR_SENTINEL = "\uE000";
+const BR_SENTINEL = '\uE000';
 const RE_RUN_BACKSLASH = /\\{2,}/g;
 const RE_NEWLINE = /\r?\n/g;
 // Accept both raw ⟦M1⟧ and wrapped \text{⟦M1⟧}
@@ -33,6 +33,7 @@ interface MathModalProps {
   id: string;
   /** seed matrices when opening the modal */
   initialMatrices?: Record<string, MatrixRec>;
+  mode: 'inline' | 'block';
 }
 
 type MatrixRec = {
@@ -55,18 +56,16 @@ const KaTeXBlock: React.FC<{ latex: string; aria?: string }> = ({
     }
   }, [latex]);
   return (
-    <div ref={ref} className="katex" role="img" aria-label={aria ?? "math"} />
+    <div ref={ref} className="katex" role="img" aria-label={aria ?? 'math'} />
   );
 };
 
 const toBmatrix = (cells: string[][]) =>
-  `\\begin{bmatrix} ${cells
-    .map((r) => r.join(" & "))
-    .join(" \\\\ ")} \\end{bmatrix}`;
+  `\\begin{bmatrix} ${cells.map((r) => r.join(' & ')).join(' \\\\ ')} \\end{bmatrix}`;
 
 const ensureSize = (rows: number, cols: number, cells?: string[][]) =>
   Array.from({ length: rows }, (_r, rIdx) =>
-    Array.from({ length: cols }, (_c, cIdx) => cells?.[rIdx]?.[cIdx] ?? "")
+    Array.from({ length: cols }, (_c, cIdx) => cells?.[rIdx]?.[cIdx] ?? '')
   );
 
 const MathModal: React.FC<MathModalProps> = ({
@@ -76,24 +75,27 @@ const MathModal: React.FC<MathModalProps> = ({
   onSave,
   id,
   initialMatrices,
+  mode,
 }) => {
+  const isInline = mode === 'inline';
+
   const modalRef = useRef<HTMLDivElement>(null);
   const [hasActiveEditor, setHasActiveEditor] = useState(false);
 
   // reflect when any MathQuill field becomes active
   useEffect(() => {
     const update = () => setHasActiveEditor(Boolean(window.activeMQField));
-    document.addEventListener("focusin", update);
+    document.addEventListener('focusin', update);
     update();
-    return () => document.removeEventListener("focusin", update);
+    return () => document.removeEventListener('focusin', update);
   }, []);
 
   const splitLines = useMemo(() => {
-    if (!initialLatex) return [""];
+    if (!initialLatex) return [''];
     const normalized = initialLatex
       .replace(
         RE_RUN_BACKSLASH,
-        (m) => BR_SENTINEL + (m.length % 2 ? "\\" : "")
+        (m) => BR_SENTINEL + (m.length % 2 ? '\\' : '')
       )
       .replace(RE_NEWLINE, BR_SENTINEL);
     return normalized.split(BR_SENTINEL);
@@ -144,7 +146,7 @@ const MathModal: React.FC<MathModalProps> = ({
     );
     const maxIdx =
       Object.values(seed)
-        .map((r) => Number(r.label.replace(/^M/, "")) || 0)
+        .map((r) => Number(r.label.replace(/^M/, '')) || 0)
         .reduce((a, b) => Math.max(a, b), 0) || 0;
     setNextMatrixIndex(Math.max(1, maxIdx + 1));
 
@@ -164,14 +166,14 @@ const MathModal: React.FC<MathModalProps> = ({
     rows: 2,
     cols: 2,
     cells: [
-      ["", ""],
-      ["", ""],
+      ['', ''],
+      ['', ''],
     ],
   });
 
   // Stable keys for rows/cols (avoid array index keys)
-  const [rowKeys, setRowKeys] = useState<string[]>(["r0", "r1"]);
-  const [colKeys, setColKeys] = useState<string[]>(["c0", "c1"]);
+  const [rowKeys, setRowKeys] = useState<string[]>(['r0', 'r1']);
+  const [colKeys, setColKeys] = useState<string[]>(['c0', 'c1']);
 
   useEffect(() => {
     setRowKeys((prev) =>
@@ -199,8 +201,31 @@ const MathModal: React.FC<MathModalProps> = ({
     );
   }, [draft.cols]);
 
+  useEffect(() => {
+    if (!isOpen || !isInline) {
+      // Always return a cleanup to satisfy eslint-consistent-return
+      return () => {};
+    }
+
+    const handler = (e: KeyboardEvent) => {
+      const target = e.target as Node | null;
+      if (!modalRef.current || !target || !modalRef.current.contains(target)) {
+        return;
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    // Use an options object so add/remove match exactly
+    const opts = { capture: true as const };
+    document.addEventListener('keydown', handler, opts);
+    return () => document.removeEventListener('keydown', handler, opts);
+  }, [isOpen, isInline]);
+
   // Keep track of the field that was active when user clicked the toolbar button
-  const lastActiveFieldRef = useRef<Window["activeMQField"] | null>(null);
+  const lastActiveFieldRef = useRef<Window['activeMQField'] | null>(null);
 
   const handleStartInsertMatrix = useCallback(
     (preset?: { rows: number; cols: number }) => {
@@ -279,8 +304,8 @@ const MathModal: React.FC<MathModalProps> = ({
   const handleSave = useCallback(() => {
     // Assemble lines in the exact render order reported by MathBlock
     const finalLatexWithPlaceholders = lineOrder
-      .map((idx) => lines[idx] ?? "")
-      .join("\\\\");
+      .map((idx) => lines[idx] ?? '')
+      .join('\\\\');
 
     // Save only matrices whose labels are currently used
     const used = new Set<string>();
@@ -304,10 +329,10 @@ const MathModal: React.FC<MathModalProps> = ({
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === 'Escape') onClose();
     };
-    if (isOpen) document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    if (isOpen) document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
   }, [isOpen, onClose]);
 
   // ref to call MathBlock.addLine()
@@ -315,9 +340,9 @@ const MathModal: React.FC<MathModalProps> = ({
 
   // Platform label (not a hook)
   const isMac =
-    typeof navigator !== "undefined" &&
+    typeof navigator !== 'undefined' &&
     /Mac|iPhone|iPad/.test(navigator.platform);
-  const modKeyLabel = isMac ? "⌘" : "Ctrl";
+  const modKeyLabel = isMac ? '⌘' : 'Ctrl';
 
   // Undo / Redo — they act on the CURRENT active field
   const handleUndo = useCallback(() => {
@@ -349,7 +374,7 @@ const MathModal: React.FC<MathModalProps> = ({
       const key = e.key.toLowerCase();
 
       // Undo: Ctrl/Cmd+Z
-      if (key === "z" && !e.shiftKey) {
+      if (key === 'z' && !e.shiftKey) {
         e.preventDefault();
         window.activeMQField?.focus();
         window.mqUndo?.();
@@ -357,7 +382,7 @@ const MathModal: React.FC<MathModalProps> = ({
       }
 
       // Redo: Ctrl/Cmd+Shift+Z
-      if (key === "z" && e.shiftKey) {
+      if (key === 'z' && e.shiftKey) {
         e.preventDefault();
         window.activeMQField?.focus();
         window.mqRedo?.();
@@ -365,16 +390,16 @@ const MathModal: React.FC<MathModalProps> = ({
       }
 
       // Redo (Windows-style): Ctrl/Cmd+Y
-      if (key === "y") {
+      if (key === 'y') {
         e.preventDefault();
         window.activeMQField?.focus();
         window.mqRedo?.();
       }
     };
 
-    document.addEventListener("keydown", onKeydown, true);
+    document.addEventListener('keydown', onKeydown, true);
     return () => {
-      document.removeEventListener("keydown", onKeydown, true);
+      document.removeEventListener('keydown', onKeydown, true);
     };
   }, [isOpen]);
 
@@ -395,7 +420,7 @@ const MathModal: React.FC<MathModalProps> = ({
         className="absolute inset-0 bg-black/50 backdrop-blur-[2px] cursor-default"
         onClick={onClose}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onClose();
           }
@@ -471,20 +496,23 @@ const MathModal: React.FC<MathModalProps> = ({
             <div className="px-4 sm:px-6 py-2 bg-zinc-50/90 dark:bg-zinc-900/80 backdrop-blur supports-[backdrop-filter]:bg-zinc-50/60">
               <MathToolbar onStartInsertMatrix={handleStartInsertMatrix} />
             </div>
-            <div className="px-4 sm:px-6 py-2 bg-gray-50 dark:bg-gray-900">
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => blockRef.current?.addLine()}
-                  className="h-8 px-3 rounded-lg border border-zinc-300/60 dark:border-zinc-700/60 
+            {/* ✅ Hide this bar entirely for inline mode */}
+            {!isInline && (
+              <div className="px-4 sm:px-6 py-2 bg-gray-50 dark:bg-gray-900">
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => blockRef.current?.addLine()}
+                    className="h-8 px-3 rounded-lg border border-zinc-300/60 dark:border-zinc-700/60 
                      bg-white/70 dark:bg-zinc-800/60 hover:bg-zinc-100 dark:hover:bg-zinc-700 
                      text-sm font-medium shadow-sm"
-                  aria-label="Add new line"
-                >
-                  New line
-                </button>
+                    aria-label="Add new line"
+                  >
+                    New line
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Two-column content */}
@@ -583,5 +611,5 @@ const MathModal: React.FC<MathModalProps> = ({
   );
 };
 
-MathModal.displayName = "MathModal";
+MathModal.displayName = 'MathModal';
 export default MathModal;

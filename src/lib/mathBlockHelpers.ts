@@ -1,7 +1,7 @@
 // src/lib/mathBlockHelpers.ts
-import type { Editor } from "@tiptap/core";
-import { NodeSelection, TextSelection, Selection } from "@tiptap/pm/state";
-import type { ResolvedPos } from "@tiptap/pm/model";
+import type { Editor } from '@tiptap/core';
+import { NodeSelection, TextSelection, Selection } from '@tiptap/pm/state';
+import type { ResolvedPos } from '@tiptap/pm/model';
 
 /**
  * Insert a math block on the "next line" after the current block,
@@ -10,7 +10,7 @@ import type { ResolvedPos } from "@tiptap/pm/model";
  */
 export default function addMathBlockOnNextLine(
   editor: Editor,
-  initialLatex = "x = \\square",
+  initialLatex = 'x = \\square',
   { ensureSpacerParagraph = false }: { ensureSpacerParagraph?: boolean } = {}
 ): boolean {
   if (!editor) return false;
@@ -66,4 +66,15 @@ export default function addMathBlockOnNextLine(
 
   // Finally, insert the math block at the current selection
   return editor.chain().focus().addMathBlock({ latex: initialLatex }).run();
+}
+
+/**
+ * Insert inline math at the current cursor position.
+ */
+export function addMathInlineAtSelection(
+  editor: Editor,
+  initialLatex = 'x=\\square'
+): boolean {
+  if (!editor) return false;
+  return editor.chain().focus().addMathInline({ latex: initialLatex }).run();
 }
