@@ -1,6 +1,7 @@
 // src/components/MathBlock.tsx
-import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import EditableMathField from "./EditableMathField";
+import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import EditableMathField from './EditableMathField';
+import safeId from '../lib/safeId';
 
 interface MathBlockProps {
   /** One LaTeX expression per line */
@@ -19,11 +20,11 @@ interface Field {
 }
 
 const MathBlock = forwardRef<MathBlockHandle, MathBlockProps>(
-  ({ initialExpressions = [""], onOrderChange }, ref) => {
+  ({ initialExpressions = [''], onOrderChange }, ref) => {
     // Track fields with unique IDs
     const [fields, setFields] = useState<Field[]>(
       initialExpressions.map((latex) => ({
-        id: crypto.randomUUID(),
+        id: safeId(),
         latex,
       }))
     );
@@ -37,24 +38,21 @@ const MathBlock = forwardRef<MathBlockHandle, MathBlockProps>(
     useEffect(() => {
       const handler = (e: KeyboardEvent) => {
         const isInModal = document
-          .querySelector(".math-modal")
+          .querySelector('.math-modal')
           ?.contains(e.target as Node);
 
-        if (e.key === "Enter" && isInModal) {
+        if (e.key === 'Enter' && isInModal) {
           e.preventDefault();
-          setFields((prev) => [
-            ...prev,
-            { id: crypto.randomUUID(), latex: "" },
-          ]);
+          setFields((prev) => [...prev, { id: safeId(), latex: '' }]);
         }
       };
-      document.addEventListener("keydown", handler);
-      return () => document.removeEventListener("keydown", handler);
+      document.addEventListener('keydown', handler);
+      return () => document.removeEventListener('keydown', handler);
     }, []);
 
     // expose programmatic addLine for the toolbar button
-    const addLine = (latex = "") => {
-      setFields((prev) => [...prev, { id: crypto.randomUUID(), latex }]);
+    const addLine = (latex = '') => {
+      setFields((prev) => [...prev, { id: safeId(), latex }]);
     };
 
     useImperativeHandle(ref, () => ({ addLine }), []);
@@ -63,7 +61,7 @@ const MathBlock = forwardRef<MathBlockHandle, MathBlockProps>(
       setFields((prev) => {
         if (prev.length === 1) {
           // keep one field: just clear the remaining line
-          return [{ ...prev[0], latex: "" }];
+          return [{ ...prev[0], latex: '' }];
         }
         return prev.filter((f) => f.id !== id);
       });
@@ -97,5 +95,5 @@ const MathBlock = forwardRef<MathBlockHandle, MathBlockProps>(
   }
 );
 
-MathBlock.displayName = "MathBlock";
+MathBlock.displayName = 'MathBlock';
 export default MathBlock;
