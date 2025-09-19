@@ -153,10 +153,12 @@ const MathModal: React.FC<MathModalProps> = ({
         .reduce((a, b) => Math.max(a, b), 0) || 0;
     setNextMatrixIndex(Math.max(1, maxIdx + 1));
 
-    // Clear old lines when reopening modal
-    setLines({});
-    setLineOrder([]);
-  }, [isOpen, initialMatrices]);
+    const seededLines: Record<string, string> = Object.fromEntries(
+      splitLines.map((latex, i) => [String(i), latex])
+    );
+    setLines(seededLines);
+    setLineOrder(splitLines.map((_, i) => String(i)));
+  }, [isOpen, initialMatrices, splitLines]);
 
   // Editor modal state
   const [isMatrixEditorOpen, setMatrixEditorOpen] = useState(false);
