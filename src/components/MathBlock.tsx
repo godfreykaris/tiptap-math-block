@@ -1,7 +1,8 @@
 // src/components/MathBlock.tsx
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
-import EditableMathField from './EditableMathField';
-import safeId from '../lib/safeId';
+import { useEffect, useState, useImperativeHandle, forwardRef } from "react";
+import EditableMathField from "./EditableMathField";
+import safeId from "../lib/safeId";
+import { useLineContext } from "./LineContext";
 
 interface MathBlockProps {
   /** One LaTeX expression per line */
@@ -20,49 +21,76 @@ interface Field {
 }
 
 const MathBlock = forwardRef<MathBlockHandle, MathBlockProps>(
-  ({ initialExpressions = [''], onOrderChange }, ref) => {
-    // Track fields with unique IDs
+  ({ initialExpressions = [""], onOrderChange }, ref) => {
+    const { setLine } = useLineContext();
+
+    // Build fields from initial expressions (fresh IDs each open is OK)
     const [fields, setFields] = useState<Field[]>(
-      initialExpressions.map((latex) => ({
-        id: safeId(),
-        latex,
-      }))
+      initialExpressions.map((latex) => ({ id: safeId(), latex }))
     );
 
-    // Tell parent the current order whenever it changes
+    // Keep parent informed of render order
     useEffect(() => {
       onOrderChange?.(fields.map((f) => f.id));
     }, [fields, onOrderChange]);
+
+    // ✅ Synchronously seed the parent's line map anytime fields array changes
+    // (covers first mount, add/remove, and when initialExpressions rebuild fields)
+    useEffect(() => {
+      fields.forEach((f) => setLine(f.id, f.latex ?? ""));
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fields]);
+
+    // Rebuild fields if prop changes (e.g., modal reopened with new content)
+    useEffect(() => {
+      const next = initialExpressions.map((latex) => ({ id: safeId(), latex }));
+      setFields(next); // seeding happens in the fields-effect above
+    }, [initialExpressions]);
 
     // Add a new blank field on Enter only when in modal
     useEffect(() => {
       const handler = (e: KeyboardEvent) => {
         const isInModal = document
-          .querySelector('.math-modal')
+          .querySelector(".math-modal")
           ?.contains(e.target as Node);
 
-        if (e.key === 'Enter' && isInModal) {
+        if (e.key === "Enter" && isInModal) {
           e.preventDefault();
-          setFields((prev) => [...prev, { id: safeId(), latex: '' }]);
+          setFields((prev) => {
+            const id = safeId();
+            // seed parent immediately to avoid Save race
+            setLine(id, "");
+            return [...prev, { id, latex: "" }];
+          });
         }
       };
-      document.addEventListener('keydown', handler);
-      return () => document.removeEventListener('keydown', handler);
-    }, []);
+      document.addEventListener("keydown", handler);
+      return () => document.removeEventListener("keydown", handler);
+    }, [setLine]);
 
-    // expose programmatic addLine for the toolbar button
-    const addLine = (latex = '') => {
-      setFields((prev) => [...prev, { id: safeId(), latex }]);
-    };
-
-    useImperativeHandle(ref, () => ({ addLine }), []);
+    // Programmatic addLine (toolbar)
+    useImperativeHandle(
+      ref,
+      () => ({
+        addLine: (latex = "") => {
+          const id = safeId();
+          setLine(id, latex); // seed immediately
+          setFields((prev) => [...prev, { id, latex }]);
+        },
+      }),
+      [setLine]
+    );
 
     const removeField = (id: string) => {
       setFields((prev) => {
         if (prev.length === 1) {
           // keep one field: just clear the remaining line
-          return [{ ...prev[0], latex: '' }];
+          const cleared = { ...prev[0], latex: "" };
+          setLine(cleared.id, "");
+          return [cleared];
         }
+        // also clear the parent's entry for the removed id
+        setLine(id, "");
         return prev.filter((f) => f.id !== id);
       });
     };
@@ -72,13 +100,13 @@ const MathBlock = forwardRef<MathBlockHandle, MathBlockProps>(
         {fields.map((field, idx) => (
           <div
             key={field.id}
-            className="w-full max-w-lg flex items-start gap-2 mb-2 "
+            className="w-full max-w-lg flex items-start gap-2 mb-2"
           >
             <div className="flex-1">
+              {/* EditableMathField will keep pushing live edits; our eager seed above closes the initial race */}
               <EditableMathField initialLatex={field.latex} lineId={field.id} />
             </div>
 
-            {/* tiny remove button */}
             <button
               type="button"
               aria-label={`remove line ${idx + 1}`}
@@ -95,5 +123,5 @@ const MathBlock = forwardRef<MathBlockHandle, MathBlockProps>(
   }
 );
 
-MathBlock.displayName = 'MathBlock';
+MathBlock.displayName = "MathBlock";
 export default MathBlock;
