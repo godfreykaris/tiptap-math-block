@@ -10,7 +10,7 @@ A ready-to-use **Tiptap extension** and **React components** for editing LaTeX m
 - ␣ **Spacebar inserts spaces** inside math fields (`\\ `), so you can format equations naturally.
 - 🧹 **Helper functions** to safely insert new math blocks/inline nodes without overwriting the selected one.
 - 🔌 **Bridge hook** that wires the extension to the modal with zero boilerplate.
-- 📦 Works with **Tiptap 2 + React**.
+- 📦 Works with **TipTap 3 + React 19**.
 - 🔒 **Security Note:** This package uses [MathQuill](http://mathquill.com/), which historically depended on an older version of jQuery. We apply an **override to force jQuery 3.7.1** (the latest safe version) to eliminate known vulnerabilities.
 
 ---
@@ -26,8 +26,20 @@ yarn add @godfreykaris/tiptap-math-block
 Peer dependencies (make sure you have them installed):
 
 ```bash
-npm install @tiptap/react @tiptap/starter-kit @tiptap/pm katex react react-dom
+npm install @tiptap/core @tiptap/react katex mathquill react react-dom
 ```
+
+| Peer | Required range |
+| --- | --- |
+| `@tiptap/core` | `^3.0.9` |
+| `@tiptap/react` | `^3.0.9` |
+| `katex` | `^0.16.22` |
+| `mathquill` | `^0.10.1-a` |
+| `react` / `react-dom` | `^19.1.0` |
+
+TipTap 2 and React 18 are not supported. The Quick Start below also uses
+`@tiptap/starter-kit` and `@tiptap/pm`, which are not peers of this package:
+install them only if your editor needs them.
 
 If your project’s security scanner flags jQuery vulnerabilities when installing MathQuill, note that **this package overrides MathQuill’s old jQuery requirement to use 3.7.1**. Consumers should add their own override/resolution in their app if they still see warnings.
 
